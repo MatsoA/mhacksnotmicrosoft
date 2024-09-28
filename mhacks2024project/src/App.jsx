@@ -1,10 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    const webSocket = new WebSocket("wss://" + window.location.host + "/ws");
+    webSocket.addEventListener("message", (e) => console.log(e));
+    webSocket.addEventListener("open", () => webSocket.send("MEOWIING"));
+  }, []) 
+  
 
   return (
     <>
