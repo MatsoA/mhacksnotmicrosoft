@@ -7,7 +7,7 @@ function App() {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
-    const webSocket = new WebSocket("wss://" + window.location.host + "/ws");
+    const webSocket = new WebSocket((window.location.protocol == "http:" ? "ws://" : "wss://") + window.location.host + "/ws");
     webSocket.addEventListener("message", (e) => console.log(e));
     webSocket.addEventListener("open", () => webSocket.send("MEOWIING"));
   }, []) 

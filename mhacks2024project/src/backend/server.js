@@ -5,28 +5,22 @@
 
 import express from 'express';
 import expressWs from 'express-ws'
+import ViteExpress from "vite-express";
 
 const app = express();
 
 expressWs(app);
 
-//root route handler
-app.get(',', (req, res, next) => {
-    console.log('root');
-    res.end();
-});
-
 //on connect
 app.ws('/ws', (ws, req) => {
-    //event listener for new websocket
+    console.log("Websocket connection");
     ws.on('message', (msg) => {
         console.log(msg);
-        ws.send("MEWO");
+        ws.send(msg);
     });
 
     console.log('socket', req);
 }); 
 
-app.listen(3000);
-
-
+console.log("Starting server!");
+ViteExpress.listen(app, 3000, () => console.log("Server is listening..."));
