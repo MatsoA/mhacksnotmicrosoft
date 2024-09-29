@@ -11,15 +11,33 @@ const app = express();
 
 expressWs(app);
 
-//on connect
-app.ws('/ws', (ws, req) => {
-    console.log("Websocket connection");
-    ws.on('message', (msg) => {
-        console.log(msg);
-        ws.send(msg);
-    });
+let users = new Map();
 
-    console.log('socket', req);
+function constructStateMessage(user_id) {
+    let user = users.get(user_id)
+    return {
+        user_id: user.id
+    };
+}
+
+// On connect
+let next_user_id = 0;
+app.ws('/ws', (ws, req) => {
+    console.log("User connected!");
+
+    // Create user
+    let user = {
+        id: next_user_id
+    }
+    users.set(user.id, user);
+    next_user_id += 1;
+
+    // Send state to user
+    ws.send(JSON.stringify(constructStateMessage(user.id)));
+
+    ws.on('message', (msg) => {
+        // TODO
+    });
 }); 
 
 console.log("Starting server!");
